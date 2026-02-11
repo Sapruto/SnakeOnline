@@ -48,4 +48,10 @@ def update_game():
     return "success"
 
 
-app.run(port=5500, debug=True)
+app.run(
+    host='0.0.0.0',
+    port=5000,
+    debug=False,
+    threaded=True,
+    use_reloader=False
+)
