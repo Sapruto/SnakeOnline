@@ -57,15 +57,29 @@ class Snake(GameObject):
         self.positions = positions
         self.body_color = color
 
-    def draw(self):
-        for position in self.positions[:-1]:
-            rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
-            pygame.draw.rect(screen, self.body_color, rect)
-            pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
+        self.head_img = pygame.image.load("resources/snake_head.png").convert_alpha()
+        self.body_img = pygame.image.load("resources/snake_body.png").convert_alpha()
 
-        head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
-        pygame.draw.rect(screen, self.body_color, head_rect)
-        pygame.draw.rect(screen, BORDER_COLOR, head_rect, 1)
+        self.head_img = pygame.transform.scale(self.head_img, (GRID_SIZE, GRID_SIZE))
+        self.body_img = pygame.transform.scale(self.body_img, (GRID_SIZE, GRID_SIZE))
+
+    def draw(self):
+        if self.head_img is None or self.body_img is None:
+            for position in self.positions[:-1]:
+                rect = pygame.Rect(position, (GRID_SIZE, GRID_SIZE))
+                pygame.draw.rect(screen, self.body_color, rect)
+                pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
+
+            head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
+            pygame.draw.rect(screen, self.body_color, head_rect)
+            pygame.draw.rect(screen, BORDER_COLOR, head_rect, 1)
+        else:
+            for position in self.positions[1:]:
+                rect = pygame.Rect(position, (GRID_SIZE, GRID_SIZE))
+                screen.blit(self.body_img, rect)
+
+            head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
+            screen.blit(self.head_img, head_rect)
 
     def get_head_position(self):
         return self.positions[0]
@@ -119,3 +133,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+    requests.post(f"{serverURL}/disconnect", json={
+            "id": ID,
+        })

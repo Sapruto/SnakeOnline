@@ -10,6 +10,17 @@ SIZE = 20
 all_snakes: list[Snake] = []
 apple = Apple()
 
+rome: list[dict] = []
+
+@app.route("/create_rome", methods=["GET"])
+def creat_rome():
+    new_apple = Apple()
+    new_all_snakes: list[Snake] = []
+
+    rome.append({"apple": new_apple, "all_snakes": new_all_snakes})
+
+    return str(len(rome) - 1)
+
 @app.route("/connect", methods=["GET"])
 def connect():
     global all_snakes
@@ -45,6 +56,20 @@ def update_game():
     game_update(all_snakes, apple)
     
     return "success"
+
+
+@app.route("/disconnect", methods=["POST"])
+def disconnect():
+    global all_snakes
+
+    data = request.json
+    id = data["id"]
+
+    if 0 <= id < len(all_snakes):
+        all_snakes.pop(id)
+        return "success"
+    else:
+        return "snake not found", 404
 
 
 app.run(

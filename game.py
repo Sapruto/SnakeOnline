@@ -2,13 +2,11 @@ from random import randint
 
 import pygame
 
-# Константы для размеров поля и сетки:
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
 GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
 
-# Направления движения:
 UP = (0, -1)
 DOWN = (0, 1)
 LEFT = (-1, 0)
@@ -17,12 +15,10 @@ RIGHT = (1, 0)
 
 class GameObject:
     def __init__(self):
-        """Инициализирует базовые атрибуты объекта."""
         self.position = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.body_color = None
 
     def draw(self):
-        """Абстрактный метод для отрисовки объекта на экране."""
         pass
 
 
@@ -42,10 +38,7 @@ class Apple(GameObject):
 
 
 class Snake(GameObject):
-    """Класс для объекта 'змейка'."""
-
     def __init__(self, position, color):
-        """Инициализирует начальное состояние змейки."""
         super().__init__()
         self.length = 2
         self.positions = [position]
@@ -56,39 +49,27 @@ class Snake(GameObject):
         self.events = []
 
     def update_direction(self):
-        """Обновляет направление движения змейки."""
         if self.next_direction:
             self.direction = self.next_direction
             self.next_direction = None
 
     def move(self):
-        """
-        Обновляет позицию змейки, добавляя новую голову в начало
-        списка positions и удаляя последний элемент.
-        """
         head_x, head_y = self.get_head_position()
         direction_x, direction_y = self.direction
-        # Новая позиция головы с учетом "зацикленности" поля
         new_x = (head_x + (direction_x * GRID_SIZE)) % SCREEN_WIDTH
         new_y = (head_y + (direction_y * GRID_SIZE)) % SCREEN_HEIGHT
-        # Проверка на столкновение с самой собой
         if (new_x, new_y) in self.positions[1:]:
             self.reset()
         else:
-            # Добавление новой головы
             self.positions.insert(0, (new_x, new_y))
-            # Сохраняем последнюю позицию для затирания
             self.last = self.positions[-1]
-            # Удаляем хвост, если длина змейки не увеличилась
             if len(self.positions) > self.length:
                 self.positions.pop()
 
     def get_head_position(self):
-        """Возвращает позицию головы змейки."""
         return self.positions[0]
 
     def reset(self):
-        """Сбрасывает змейку в начальное состояние."""
         self.length = 2
         self.positions = [(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)]
         self.direction = RIGHT
@@ -96,7 +77,6 @@ class Snake(GameObject):
         self.last = None
 
 def handle_keys(game_object, events):
-    """Обрабатывает нажатия клавиш."""
     for key in events:
         if key == pygame.K_UP and game_object.direction != DOWN:
             game_object.next_direction = UP
@@ -140,4 +120,3 @@ def update_game(all_snakes, apple):
     for i in range(0, len(all_snakes)):
         for j in range(i + 1, len(all_snakes)):
             snake_collision(all_snakes[i], all_snakes[j])
-    # snake_collision(snake1, snake2)
