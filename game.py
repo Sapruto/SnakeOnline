@@ -44,7 +44,7 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Класс для объекта 'змейка'."""
 
-    def __init__(self, position):
+    def __init__(self, position, color):
         """Инициализирует начальное состояние змейки."""
         super().__init__()
         self.length = 2
@@ -52,6 +52,8 @@ class Snake(GameObject):
         self.direction = RIGHT
         self.next_direction = None
         self.last = None
+        self.color = color
+        self.events = []
 
     def update_direction(self):
         """Обновляет направление движения змейки."""
@@ -131,7 +133,11 @@ def update_snake(snake, keys, apple):
         apple.randomize_position(snake.positions)
 
 
-def update_game(snake1, snake1_keys, snake2, snake2_keys, apple):
-    update_snake(snake1, snake1_keys, apple)
-    update_snake(snake2, snake2_keys, apple)
-    snake_collision(snake1, snake2)
+def update_game(all_snakes, apple):
+    for snake in all_snakes:
+        update_snake(snake, snake.events, apple)
+
+    for i in range(0, len(all_snakes)):
+        for j in range(i + 1, len(all_snakes)):
+            snake_collision(all_snakes[i], all_snakes[j])
+    # snake_collision(snake1, snake2)

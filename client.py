@@ -1,9 +1,9 @@
 import pygame
 import requests
 
-serverURL = "http://127.0.0.1:5500"
+serverURL = "http://127.0.0.1:5000"
 
-ID = int(input("Enter ur id (1, 2): "))
+ID = int(requests.get(f"{serverURL}/connect").text)
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 GRID_SIZE = 20
@@ -105,7 +105,7 @@ def main():
             "events": keys
         })
 
-        if ID == 1:
+        if ID == 0:
             requests.get(f"{serverURL}/update_game")
 
         screen.fill(BOARD_BACKGROUND_COLOR)
