@@ -115,6 +115,10 @@ def update_snakes():
 @app.route("/update_game", methods=["GET"])
 def update_game():
     game_update(all_snakes, apple, game_objects)
+
+    for obj in game_objects:
+        if obj.is_destroyed:
+            game_objects.remove(obj)
     
     return "success"
 

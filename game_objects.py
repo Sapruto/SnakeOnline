@@ -85,10 +85,15 @@ class StaticGameObject(ABC):
         self.resource_name = resource_name
         self.data = data
 
+        self.is_destroyed = False
+
     @abstractmethod
     def event(self, snake: Snake = None):
         pass
 
+    @abstractmethod
+    def destroy(self):
+        self.is_destroyed = True
 
 class Portal(StaticGameObject):
     def __init__(self, position, resource_name, data):

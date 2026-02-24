@@ -42,6 +42,7 @@ def update_snake(snake, keys, apple):
 def update_snake_with_game_object(snake, game_object):
     if snake.get_head_position() == game_object.position:
         game_object.event(snake)
+        game_object.destroy()
 
 
 def update_game(all_snakes, apple, game_objects):
