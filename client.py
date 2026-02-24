@@ -1,7 +1,7 @@
 import pygame
 import requests
 
-serverURL = "http://127.0.0.1:5000" # https://glacially-phlegmatic-chihuahua.cloudpub.ru:443
+serverURL = "https://glacially-phlegmatic-chihuahua.cloudpub.ru:443"
 
 ID = int(requests.get(f"{serverURL}/connect").text)
 
@@ -84,7 +84,16 @@ class Snake(GameObject):
     def get_head_position(self):
         return self.positions[0]
 
+class DrawStaticGameObject:
+    def __init__(self, position, resource_name):
+        self.position = position
 
+        self.img = pygame.image.load(resource_name).convert_alpha()
+        self.img = pygame.transform.scale(self.img, (GRID_SIZE, GRID_SIZE))
+
+    def draw(self):
+        head_rect = pygame.Rect(self.position, (GRID_SIZE, GRID_SIZE))
+        screen.blit(self.img, head_rect)
 
 
 def main():

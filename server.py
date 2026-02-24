@@ -1,25 +1,31 @@
 import random
+from typing import Type
 
 from flask import Flask, request
-from game import update_game as game_update, Apple, Snake, SCREEN_WIDTH, SCREEN_HEIGHT, GRID_WIDTH
-
+from game import update_game as game_update, GRID_WIDTH, GRID_HEIGHT
+from game_objects import StaticGameObject, Snake, Apple, Portal, Minus
 app = Flask("PIPIDASTR")
 
 SIZE = 20
 
 all_snakes: list[Snake] = []
 apple = Apple()
+game_objects: list[StaticGameObject] = []
 
-rome: list[dict] = []
+room: list[dict] = []
+game_object_types: dict[str, Type[StaticGameObject]] = {
+    "Portal": Portal,
+    "Minus": Minus
+}
 
-@app.route("/create_rome", methods=["GET"])
+@app.route("/create_room", methods=["GET"])
 def create_room():
     new_apple = Apple()
     new_all_snakes: list[Snake] = []
 
-    rome.append({"apple": new_apple, "all_snakes": new_all_snakes})
+    room.append({"apple": new_apple, "all_snakes": new_all_snakes})
 
-    return str(len(rome) - 1)
+    return str(len(room) - 1)
 
 @app.route("/connect", methods=["GET"])
 def connect():
@@ -33,7 +39,6 @@ def connect():
 
 def get_host():
     for id, snake in enumerate(all_snakes):
-        print(id, snake)
         if snake != 0:
             return id
 
@@ -57,6 +62,31 @@ def get_board():
     }
 
 
+@app.route("/create_gameobject", methods=["POST"])
+def create_gameobject():
+    data = request.json
+    id = data["id"]
+    gameobject_type = data["gameobject_type"]
+
+    if id != get_host():
+        return "not host"
+
+    position = (random.randint(0, GRID_WIDTH), random.randint(0, GRID_HEIGHT))
+
+    data = {}
+
+    resource_name = ""
+    if gameobject_type == "Portal":
+        to_pos = (random.randint(0, GRID_WIDTH), random.randint(0, GRID_HEIGHT))
+        data = {"to_pos": to_pos}
+        resource_name = "resources/portal.png"
+    elif gameobject_type == "Minus":
+        resource_name = "resources/minus.png"
+
+    gameobject = game_object_types[gameobject_type](position, resource_name, data)
+    game_objects.append(gameobject)
+
+
 @app.route("/update_snake", methods=["POST"])
 def update_snakes():
     data = request.json
@@ -69,7 +99,7 @@ def update_snakes():
 
 @app.route("/update_game", methods=["GET"])
 def update_game():
-    game_update(all_snakes, apple)
+    game_update(all_snakes, apple, game_objects)
     
     return "success"
 
