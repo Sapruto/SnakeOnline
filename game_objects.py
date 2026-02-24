@@ -91,7 +91,6 @@ class StaticGameObject(ABC):
     def event(self, snake: Snake = None):
         pass
 
-    @abstractmethod
     def destroy(self):
         self.is_destroyed = True
 
