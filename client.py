@@ -154,6 +154,8 @@ def main():
                     gameobject_to_place = "Portal"
                 elif event.key == pygame.K_2:
                     gameobject_to_place = "Minus"
+                elif event.key == pygame.K_3:
+                    gameobject_to_place = "C++"
 
         if gameobject_to_place != 0:
             requests.post(f"{serverURL}/create_gameobject", json={

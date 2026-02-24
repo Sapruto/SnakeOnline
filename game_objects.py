@@ -47,6 +47,7 @@ class Snake(GameObject):
         self.last = None
         self.color = color
         self.events = []
+        self.speed_multiplier = 1
 
     def update_direction(self):
         if self.next_direction:
@@ -54,17 +55,18 @@ class Snake(GameObject):
             self.next_direction = None
 
     def move(self):
-        head_x, head_y = self.get_head_position()
-        direction_x, direction_y = self.direction
-        new_x = (head_x + (direction_x * GRID_SIZE)) % SCREEN_WIDTH
-        new_y = (head_y + (direction_y * GRID_SIZE)) % SCREEN_HEIGHT
-        if (new_x, new_y) in self.positions[1:]:
-            self.reset()
-        else:
-            self.positions.insert(0, (new_x, new_y))
-            self.last = self.positions[-1]
-            if len(self.positions) > self.length:
-                self.positions.pop()
+        for i in range(self.speed_multiplier):
+            head_x, head_y = self.get_head_position()
+            direction_x, direction_y = self.direction
+            new_x = (head_x + (direction_x * GRID_SIZE)) % SCREEN_WIDTH
+            new_y = (head_y + (direction_y * GRID_SIZE)) % SCREEN_HEIGHT
+            if (new_x, new_y) in self.positions[1:]:
+                self.reset()
+            else:
+                self.positions.insert(0, (new_x, new_y))
+                self.last = self.positions[-1]
+                if len(self.positions) > self.length:
+                    self.positions.pop()
 
     def get_head_position(self):
         return self.positions[0]
@@ -110,3 +112,13 @@ class Minus(StaticGameObject):
         for i in range(randint(1, snake.length - 1)):
             snake.positions.pop()
             snake.length -= 1
+
+class CpeedPlusPlus(StaticGameObject):
+    def __init__(self, position, resource_name, data):
+        super().__init__(position, resource_name, data)
+
+    def event(self, snake: Snake = None):
+        if snake.speed_multiplier == 1:
+            snake.speed_multiplier = snake.length
+        else:
+            snake.speed_multiplier = 1

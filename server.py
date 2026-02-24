@@ -3,7 +3,7 @@ from typing import Type
 
 from flask import Flask, request
 from game import update_game as game_update, GRID_WIDTH, GRID_HEIGHT, GRID_SIZE
-from game_objects import StaticGameObject, Snake, Apple, Portal, Minus
+from game_objects import StaticGameObject, Snake, Apple, Portal, Minus, CpeedPlusPlus
 app = Flask("PIPIDASTR")
 
 SIZE = 20
@@ -15,7 +15,8 @@ game_objects: list[StaticGameObject] = []
 room: list[dict] = []
 game_object_types: dict[str, Type[StaticGameObject]] = {
     "Portal": Portal,
-    "Minus": Minus
+    "Minus": Minus,
+    "C++": CpeedPlusPlus
 }
 
 @app.route("/create_room", methods=["GET"])
@@ -94,6 +95,8 @@ def create_gameobject():
         resource_name = "resources/portal.png"
     elif gameobject_type == "Minus":
         resource_name = "resources/minus.png"
+    elif gameobject_type == "C++":
+        resource_name = "resources/kofee.png"
 
     gameobject = game_object_types[gameobject_type](position, resource_name, data)
     game_objects.append(gameobject)
