@@ -10,10 +10,10 @@ SIZE = 20
 all_snakes: list[Snake] = []
 apple = Apple()
 
-rome: list[dict] = []
+room: list[dict] = []
 
-@app.route("/create_rome", methods=["GET"])
-def creat_rome():
+@app.route("/create_room", methods=["GET"])
+def create_room():
     new_apple = Apple()
     new_all_snakes: list[Snake] = []
 
