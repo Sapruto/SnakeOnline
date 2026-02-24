@@ -1,7 +1,7 @@
 import pygame
 import requests
 
-serverURL = "http://127.0.0.1:5000"
+serverURL = "http://127.0.0.1:5000" # https://glacially-phlegmatic-chihuahua.cloudpub.ru:443
 
 ID = int(requests.get(f"{serverURL}/connect").text)
 
