@@ -45,19 +45,30 @@ def get_host():
 
 @app.route("/get_board", methods=["POST"])
 def get_board():
-    snakes = []
     id = request.json["id"]
 
     if id == get_host():
         update_game()
+
+    snakes = []
 
     for snake in all_snakes:
         if snake == 0:
             snakes.append(0)
         else:
             snakes.append({"snake_pos": snake.positions, "snake_color": snake.color})
+
+    gameobjects_serialized = []
+
+    for gameobject in game_objects:
+        gameobjects_serialized.append({
+            "position": gameobject.position,
+            "resource_name": gameobject.resource_name
+        })
+
     return {
         "all_snakes": snakes,
+        "game_objects": gameobjects_serialized,
         "apple": apple.position
     }
 

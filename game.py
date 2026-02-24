@@ -13,6 +13,7 @@ def handle_keys(game_object, events):
         elif key == pygame.K_RIGHT and game_object.direction != LEFT:
             game_object.next_direction = RIGHT
 
+
 def snake_collision(snake1, snake2):
     head1 = snake1.get_head_position()
     head2 = snake2.get_head_position()

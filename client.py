@@ -119,6 +119,11 @@ def main():
                 new_snake = Snake(snake_data["snake_pos"], snake_data["snake_color"])
                 all_snakes.append(new_snake)
 
+        gameobjects = []
+
+        for gameobject_data in data["game_objects"]:
+            gameobjects.append(DrawStaticGameObject(gameobject_data["position"], gameobject_data["resource_name"]))
+
         events = pygame.event.get()
         keys = []
         
@@ -141,6 +146,9 @@ def main():
 
             snake.draw()
         apple.draw()
+
+        for gameobject in gameobjects:
+            gameobject.draw()
 
         pygame.display.update()
 
