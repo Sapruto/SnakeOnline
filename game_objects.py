@@ -104,7 +104,9 @@ class Minus(StaticGameObject):
         super().__init__(position, resource_name, data)
 
     def event(self, snake: Snake = None):
-        try:
-            snake.length -= randint(1, min(3, snake.length))
-        except Exception as e:
-            print(f"{e}")
+        if snake.length <= 2:
+            return
+
+        for i in range(randint(1, snake.length - 1)):
+            snake.positions.pop()
+            snake.length -= 1

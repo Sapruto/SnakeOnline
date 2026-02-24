@@ -52,6 +52,8 @@ def update_game(all_snakes, apple, game_objects):
         update_snake(snake, snake.events, apple)
 
     for snake in all_snakes:
+        if snake == 0:
+            continue
         for game_object in game_objects:
             update_snake_with_game_object(snake, game_object)
 

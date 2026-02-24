@@ -32,6 +32,7 @@ def connect():
     global all_snakes
 
     snake = Snake((0, 0), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+    # snake = Snake((0, 0), (0, 0, 0))
 
     all_snakes.append(snake)
 
