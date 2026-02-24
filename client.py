@@ -126,12 +126,24 @@ def main():
 
         events = pygame.event.get()
         keys = []
-        
+
+        gameobject_to_place = 0
+
         for event in events:
             if event.type == pygame.QUIT:
                 return
             if event.type == pygame.KEYDOWN:
                 keys.append(event.key)
+                if event.key == pygame.K_1:
+                    gameobject_to_place = "Portal"
+                elif event.key == pygame.K_2:
+                    gameobject_to_place = "Minus"
+
+        if gameobject_to_place != 0:
+            requests.post(f"{serverURL}/create_gameobject", json={
+                "id": ID,
+                "gameobject_type": gameobject_to_place
+            })
 
         requests.post(f"{serverURL}/update_snake", json={
             "id": ID,

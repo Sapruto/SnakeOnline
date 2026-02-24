@@ -2,7 +2,7 @@ import random
 from typing import Type
 
 from flask import Flask, request
-from game import update_game as game_update, GRID_WIDTH, GRID_HEIGHT
+from game import update_game as game_update, GRID_WIDTH, GRID_HEIGHT, GRID_SIZE
 from game_objects import StaticGameObject, Snake, Apple, Portal, Minus
 app = Flask("PIPIDASTR")
 
@@ -82,13 +82,13 @@ def create_gameobject():
     if id != get_host():
         return "not host"
 
-    position = (random.randint(0, GRID_WIDTH), random.randint(0, GRID_HEIGHT))
+    position = (random.randint(0, GRID_WIDTH) * GRID_SIZE, random.randint(0, GRID_HEIGHT) * GRID_SIZE)
 
     data = {}
 
     resource_name = ""
     if gameobject_type == "Portal":
-        to_pos = (random.randint(0, GRID_WIDTH), random.randint(0, GRID_HEIGHT))
+        to_pos = (random.randint(0, GRID_WIDTH) * GRID_SIZE, random.randint(0, GRID_HEIGHT) * GRID_SIZE)
         data = {"to_pos": to_pos}
         resource_name = "resources/portal.png"
     elif gameobject_type == "Minus":
