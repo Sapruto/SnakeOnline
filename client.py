@@ -63,6 +63,22 @@ class Snake(GameObject):
         self.head_img = pygame.transform.scale(self.head_img, (GRID_SIZE, GRID_SIZE))
         self.body_img = pygame.transform.scale(self.body_img, (GRID_SIZE, GRID_SIZE))
 
+        self.head_img = self._apply_color(self.head_img)
+        self.body_img = self._apply_color(self.body_img)
+
+    def _apply_color(self, image):
+        surface = pygame.Surface(image.get_size())
+        surface.fill(self.body_color)
+        surface.blit(image, (0, 0), None, pygame.BLEND_RGBA_ADD)
+
+        image = surface.copy()
+
+        surface.fill((0.5, 0.5, 0.5))
+        surface.blit(image, (0, 0), None, pygame.BLEND_RGBA_MULT)
+
+        return image
+
+
     def draw(self):
         if self.head_img is None or self.body_img is None:
             for position in self.positions[:-1]:
