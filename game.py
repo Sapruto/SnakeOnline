@@ -115,8 +115,15 @@ def update_snake(snake, keys, apple):
 
 def update_game(all_snakes, apple):
     for snake in all_snakes:
+        if snake == 0:
+            continue
+
         update_snake(snake, snake.events, apple)
 
     for i in range(0, len(all_snakes)):
+        if all_snakes[i] == 0:
+            continue
         for j in range(i + 1, len(all_snakes)):
+            if all_snakes[j] == 0:
+                continue
             snake_collision(all_snakes[i], all_snakes[j])

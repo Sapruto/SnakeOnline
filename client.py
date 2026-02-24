@@ -93,7 +93,9 @@ def main():
     while True:
         clock.tick(SPEED)
         
-        request = requests.get(f"{serverURL}/get_board")
+        request = requests.post(f"{serverURL}/get_board", json={
+            "id": ID
+        })
 
         data = request.json()
 
@@ -102,8 +104,11 @@ def main():
         apple = Apple(data["apple"])
 
         for snake_data in data["all_snakes"]:
-            new_snake = Snake(snake_data["snake_pos"], snake_data["snake_color"])
-            all_snakes.append(new_snake)
+            if snake_data == 0:
+                all_snakes.append(0)
+            else:
+                new_snake = Snake(snake_data["snake_pos"], snake_data["snake_color"])
+                all_snakes.append(new_snake)
 
         events = pygame.event.get()
         keys = []
@@ -119,12 +124,12 @@ def main():
             "events": keys
         })
 
-        if ID == 0:
-            requests.get(f"{serverURL}/update_game")
-
         screen.fill(BOARD_BACKGROUND_COLOR)
 
         for snake in all_snakes:
+            if snake == 0:
+                continue
+
             snake.draw()
         apple.draw()
 

@@ -13,7 +13,7 @@ apple = Apple()
 rome: list[dict] = []
 
 @app.route("/create_rome", methods=["GET"])
-def creat_rome():
+def create_room():
     new_apple = Apple()
     new_all_snakes: list[Snake] = []
 
@@ -31,12 +31,28 @@ def connect():
 
     return str(len(all_snakes) - 1)
 
-@app.route("/get_board", methods=["GET"])
+def get_host():
+    for id, snake in enumerate(all_snakes):
+        print(id, snake)
+        if snake != 0:
+            return id
+
+
+@app.route("/get_board", methods=["POST"])
 def get_board():
+    snakes = []
+    id = request.json["id"]
+
+    if id == get_host():
+        update_game()
+
+    for snake in all_snakes:
+        if snake == 0:
+            snakes.append(0)
+        else:
+            snakes.append({"snake_pos": snake.positions, "snake_color": snake.color})
     return {
-        "all_snakes": [
-            {"snake_pos": snake.positions, "snake_color": snake.color} for snake in all_snakes
-        ],
+        "all_snakes": snakes,
         "apple": apple.position
     }
 
@@ -66,7 +82,7 @@ def disconnect():
     id = data["id"]
 
     if 0 <= id < len(all_snakes):
-        all_snakes.pop(id)
+        all_snakes[id] = 0
         return "success"
     else:
         return "snake not found", 404
